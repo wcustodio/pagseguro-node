@@ -1,6 +1,6 @@
 {
     "name": "node-pagseguro",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Integração PagSeguro UOL com checkout transparente",
     "main": "index.js",
     "keywords": [
