@@ -2,13 +2,14 @@
     "name": "node-pagseguro",
     "version": "0.1.1",
     "description": "Integração PagSeguro UOL com checkout transparente",
-    "main": "index.js",
     "keywords": [
-        "pagseguro", "node"
+        "pagseguro",
+        "node"
     ],
+    "homepage": "https://github.com/wcustodio/pagseguro-node",
     "author": "Willian Custódio",
-    "license": "ISC",
     "dependencies": {
+        "request": "^2.83.0",
         "xml2json": "^0.11.0"
     }
 }
