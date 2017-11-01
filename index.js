@@ -1,1 +1,1 @@
-module.exports = require('./lib/node-pagseguro');
+module.exports = require('./src/pagseguro');
