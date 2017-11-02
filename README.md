@@ -87,6 +87,13 @@ payment.addItem({
 })
 ```
 
+### Obter ID de Sessão
+```javascript
+payment.sessionId(function(err, session_id) {
+
+});
+```
+
 ### Enviar Transação
 ```javascript
 payment.sendTransaction({

@@ -115,6 +115,26 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     })
 }
 
+pagseguro.prototype.sessionId = function(cb) {    
+    const url = this.url + '/sessions?token=' + this.token + '&email=' + this.email;
+
+    request.post({ url: url }, function(err, response, body) {
+        if (err) {
+            return cb(err, false);
+        } else if (response.statusCode == 200) {
+            const json = JSON.parse(xmlParser.toJson(body));
+            return cb(false, json.session.id);
+        } else {
+            const json = JSON.parse(xmlParser.toJson(body));
+            if (json.errors && json.errors.error) {
+                return cb(json.errors.error, false);
+            }
+
+            return cb(body, false);
+        }
+    })
+}
+
 pagseguro.prototype.transactionStatus = function(code, cb) {
     request.get({ url: this.url + '/transactions/' + code + '?token=' + this.token + '&email=' + this.email }, function(err, response, body) {
         if (err) {
