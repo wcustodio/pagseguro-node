@@ -62,6 +62,10 @@ pagseguro.prototype.setBilling = function(billing) {
     this.billing = billing;
 }
 
+pagseguro.prototype.setCreditCardHolder = function(holder) {    
+    this.holder = holder;
+}
+
 pagseguro.prototype.addItem = function(item) {
     this.items.push({
         qtde: item.qtde,
@@ -80,6 +84,14 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.installmentQuantity = transaction.installments || 1;
     this.checkoutData.installmentValue = transaction.value.toFixed(2);
     this.checkoutData.senderHash = transaction.hash;
+
+    if (this.checkoutData.paymentMethod == 'creditCard') {
+        this.checkoutData.creditCardHolderName = this.holder ? this.holder.name : this.sender.name;
+        this.checkoutData.creditCardHolderCPF = this.holder ? this.holder.cpf : this.sender.cpf;
+        this.checkoutData.creditCardHolderAreaCode = this.holder ? this.holder.area_code : this.sender.area_code;
+        this.checkoutData.creditCardHolderPhone = this.holder ? this.holder.phone : this.sender.phone;
+        this.checkoutData.creditCardHolderBirthDate = this.holder ? this.holder.birth_date : this.sender.birth_date;
+    }
 
     const params = {
         url: this.url + '/transactions?token=' + this.token + '&email=' + this.email,

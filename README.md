@@ -35,7 +35,20 @@ payment.setSender({
    email: String,
    cpf: String,
    area_code: String,
-   phone: String
+   phone: String,
+   birth_date: String //formato dd/mm/yyyy
+})
+```
+
+### Dados do Proprietário do Cartão de Crédito (CreditCardHolder)
+Utilizar essa função apenas se o proprietário do cartão de crédito for diferente do comprador
+```javascript
+payment.setCreditCardHolder({
+   name: String,
+   cpf: String,
+   area_code: String,
+   phone: String,
+   birth_date: String //formato dd/mm/yyyy
 })
 ```
 
@@ -77,8 +90,10 @@ payment.addItem({
 ### Enviar Transação
 ```javascript
 payment.sendTransaction({
-   method: String,
-   value: Number
+   method: String, //'boleto' ou 'creditCard'
+   value: Number,
+   installments: Number, //opcional, padrão 1
+   hash: String //senderHash gerado pela biblioteca do PagSeguro
 }, function(err, data) {
 
 });
