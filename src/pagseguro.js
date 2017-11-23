@@ -91,6 +91,7 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.senderHash = transaction.hash;
 
     if (this.checkoutData.paymentMethod == 'creditCard') {
+        this.checkoutData.creditCardToken = transaction.credit_card_token;
         this.checkoutData.creditCardHolderName = this.holder ? this.holder.name : this.sender.name;
         this.checkoutData.creditCardHolderCPF = this.holder ? this.holder.cpf : this.sender.cpf;
         this.checkoutData.creditCardHolderAreaCode = this.holder ? this.holder.area_code : this.sender.area_code;
