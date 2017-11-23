@@ -33,7 +33,7 @@ var payment = new PagSeguro({
 payment.setSender({
    name: String,
    email: String,
-   cpf: String,
+   cpf_cnpj: String,
    area_code: String,
    phone: String,
    birth_date: String //formato dd/mm/yyyy
@@ -45,7 +45,7 @@ Utilizar essa função apenas se o proprietário do cartão de crédito for dife
 ```javascript
 payment.setCreditCardHolder({
    name: String,
-   cpf: String,
+   cpf_cnpj: String,
    area_code: String,
    phone: String,
    birth_date: String //formato dd/mm/yyyy

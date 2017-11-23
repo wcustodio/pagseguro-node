@@ -30,10 +30,10 @@ pagseguro.prototype.setSender = function(sender) {
     this.checkoutData.senderPhone = sender.phone;
     this.checkoutData.senderEmail = this.mode == 'sandbox' ? this.sandbox_email : sender.email;
 
-    if (sender.cpf) {
-        this.checkoutData.senderCPF = sender.cpf;
-    } else if (sender.cnpj) {
-        this.checkoutData.senderCNPJ = sender.cnpj;
+    if (sender.cpf_cnpj.length == 11) {
+        this.checkoutData.senderCPF = sender.cpf_cnpj;
+    } else {
+        this.checkoutData.senderCNPJ = sender.cpf_cnpj;
     }
 
     this.sender = sender;
@@ -93,10 +93,16 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     if (this.checkoutData.paymentMethod == 'creditCard') {
         this.checkoutData.creditCardToken = transaction.credit_card_token;
         this.checkoutData.creditCardHolderName = this.holder ? this.holder.name : this.sender.name;
-        this.checkoutData.creditCardHolderCPF = this.holder ? this.holder.cpf : this.sender.cpf;
         this.checkoutData.creditCardHolderAreaCode = this.holder ? this.holder.area_code : this.sender.area_code;
         this.checkoutData.creditCardHolderPhone = this.holder ? this.holder.phone : this.sender.phone;
         this.checkoutData.creditCardHolderBirthDate = this.holder ? this.holder.birth_date : this.sender.birth_date;
+
+        let cpf_cnpj = this.holder ? this.holder.cpf_cnpj : this.sender.cpf_cnpj
+        if (cpf_cnpj.length == 11) {
+            this.checkoutData.creditCardHolderCPF = cpf_cnpj;
+        } else {
+            this.checkoutData.creditCardHolderCNPJ = cpf_cnpj;
+        }
     }
 
     const params = {
