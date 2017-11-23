@@ -26,10 +26,15 @@ const pagseguro = function(params) {
 
 pagseguro.prototype.setSender = function(sender) {
     this.checkoutData.senderName = sender.name;
-    this.checkoutData.senderCPF = sender.cpf;
     this.checkoutData.senderAreaCode = sender.area_code;
     this.checkoutData.senderPhone = sender.phone;
     this.checkoutData.senderEmail = this.mode == 'sandbox' ? this.sandbox_email : sender.email;
+
+    if (sender.cpf) {
+        this.checkoutData.senderCPF = sender.cpf;
+    } else if (sender.cnpj) {
+        this.checkoutData.senderCNPJ = sender.cnpj;
+    }
 
     this.sender = sender;
 }
