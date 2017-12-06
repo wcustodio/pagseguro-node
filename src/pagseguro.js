@@ -90,6 +90,10 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.installmentValue = (transaction.value / transaction.installments).toFixed(2);
     this.checkoutData.senderHash = transaction.hash;
 
+    if (transaction.installments && transaction.installments > 1) {
+        this.checkoutData.noInterestInstallmentQuantity = transaction.installments;
+    }
+
     if (this.checkoutData.paymentMethod == 'creditCard') {
         this.checkoutData.creditCardToken = transaction.credit_card_token;
         this.checkoutData.creditCardHolderName = this.holder ? this.holder.name : this.sender.name;
