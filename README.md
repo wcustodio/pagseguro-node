@@ -97,10 +97,12 @@ payment.sessionId(function(err, session_id) {
 ### Enviar Transação
 ```javascript
 payment.sendTransaction({
-   method: String, //'boleto' ou 'creditCard'
+   method: String, //'boleto', 'creditCard' ou 'eft'
    value: Number,
    installments: Number, //opcional, padrão 1
    hash: String //senderHash gerado pela biblioteca do PagSeguro
+   shippingAddressRequired:Boolean, // Para checkout de serviços utilizar false
+   bankName:String, //Obrigatório para o método eft
 }, function(err, data) {
 
 });

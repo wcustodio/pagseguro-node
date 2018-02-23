@@ -1,7 +1,7 @@
 const request = require('request');
 const xmlParser = require('xml2json');
 
-const pagseguro = function(params) {
+const pagseguro = function (params) {
     this.email = params.email;
     this.token = params.token;
     this.mode = params.sandbox == true ? 'sandbox' : 'prod';
@@ -9,8 +9,12 @@ const pagseguro = function(params) {
     this.sandbox_email = params.sandbox_email;
 
     switch (this.mode) {
-        case 'prod': this.url = 'https://ws.pagseguro.uol.com.br/v2'; break;
-        case 'sandbox': this.url = 'https://ws.sandbox.pagseguro.uol.com.br/v2'; break;
+        case 'prod':
+            this.url = 'https://ws.pagseguro.uol.com.br/v2';
+            break;
+        case 'sandbox':
+            this.url = 'https://ws.sandbox.pagseguro.uol.com.br/v2';
+            break;
     }
 
     this.checkoutData = {
@@ -24,7 +28,7 @@ const pagseguro = function(params) {
     this.items = [];
 }
 
-pagseguro.prototype.setSender = function(sender) {
+pagseguro.prototype.setSender = function (sender) {
     this.checkoutData.senderName = sender.name;
     this.checkoutData.senderAreaCode = sender.area_code;
     this.checkoutData.senderPhone = sender.phone;
@@ -39,7 +43,7 @@ pagseguro.prototype.setSender = function(sender) {
     this.sender = sender;
 }
 
-pagseguro.prototype.setShipping = function(shipping) {
+pagseguro.prototype.setShipping = function (shipping) {
     this.checkoutData.shippingAddressStreet = shipping.street;
     this.checkoutData.shippingAddressNumber = shipping.number;
     this.checkoutData.shippingAddressDistrict = shipping.district;
@@ -55,7 +59,7 @@ pagseguro.prototype.setShipping = function(shipping) {
     this.shipping = shipping;
 }
 
-pagseguro.prototype.setBilling = function(billing) {
+pagseguro.prototype.setBilling = function (billing) {
     this.checkoutData.billingAddressStreet = billing.street;
     this.checkoutData.billingAddressNumber = billing.number;
     this.checkoutData.billingAddressDistrict = billing.district;
@@ -67,11 +71,11 @@ pagseguro.prototype.setBilling = function(billing) {
     this.billing = billing;
 }
 
-pagseguro.prototype.setCreditCardHolder = function(holder) {    
+pagseguro.prototype.setCreditCardHolder = function (holder) {
     this.holder = holder;
 }
 
-pagseguro.prototype.addItem = function(item) {
+pagseguro.prototype.addItem = function (item) {
     this.items.push({
         qtde: item.qtde,
         value: item.value,
@@ -84,14 +88,20 @@ pagseguro.prototype.addItem = function(item) {
     this.checkoutData['itemDescription' + (this.items.length)] = item.description;
 }
 
-pagseguro.prototype.sendTransaction = function(transaction, cb) {
+pagseguro.prototype.sendTransaction = function (transaction, cb) {
     this.checkoutData.paymentMethod = transaction.method;
     this.checkoutData.installmentQuantity = transaction.installments || 1;
     this.checkoutData.installmentValue = (transaction.value / transaction.installments).toFixed(2);
     this.checkoutData.senderHash = transaction.hash;
+    if (transaction.hasOwnProperty('shippingAddressRequired'))
+        this.checkoutData.shippingAddressRequired = transaction.shippingAddressRequired;
 
     if (transaction.installments && transaction.installments > 1) {
         this.checkoutData.noInterestInstallmentQuantity = transaction.installments;
+    }
+
+    if (this.checkoutData.paymentMethod == 'eft') {
+        this.checkoutData.bankName = transaction.bankName;
     }
 
     if (this.checkoutData.paymentMethod == 'creditCard') {
@@ -114,7 +124,7 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
         form: this.checkoutData
     }
 
-    request.post(params, function(err, response, body) {
+    request.post(params, function (err, response, body) {
         if (err) {
             return cb(err, false);
         } else if (response.statusCode == 200) {
@@ -131,10 +141,10 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     })
 }
 
-pagseguro.prototype.sessionId = function(cb) {    
+pagseguro.prototype.sessionId = function (cb) {
     const url = this.url + '/sessions?token=' + this.token + '&email=' + this.email;
 
-    request.post({ url: url }, function(err, response, body) {
+    request.post({url: url}, function (err, response, body) {
         if (err) {
             return cb(err, false);
         } else if (response.statusCode == 200) {
@@ -151,8 +161,8 @@ pagseguro.prototype.sessionId = function(cb) {
     })
 }
 
-pagseguro.prototype.transactionStatus = function(code, cb) {
-    request.get({ url: this.url + '/transactions/' + code + '?token=' + this.token + '&email=' + this.email }, function(err, response, body) {
+pagseguro.prototype.transactionStatus = function (code, cb) {
+    request.get({url: this.url + '/transactions/' + code + '?token=' + this.token + '&email=' + this.email}, function (err, response, body) {
         if (err) {
             return cb(err, false);
         } else if (response.statusCode == 200) {
@@ -160,13 +170,27 @@ pagseguro.prototype.transactionStatus = function(code, cb) {
 
             let status = '';
             switch (json.transaction.status) {
-                case '1': status = 'Aguardando Pagamento'; break;
-                case '2': status = 'Em Análise'; break;
-                case '3': status = 'Paga'; break;
-                case '4': status = 'Disponível'; break;
-                case '5': status = 'Em Disputa'; break;
-                case '6': status = 'Devolvida'; break;
-                case '7': status = 'Cancelada'; break;
+                case '1':
+                    status = 'Aguardando Pagamento';
+                    break;
+                case '2':
+                    status = 'Em Análise';
+                    break;
+                case '3':
+                    status = 'Paga';
+                    break;
+                case '4':
+                    status = 'Disponível';
+                    break;
+                case '5':
+                    status = 'Em Disputa';
+                    break;
+                case '6':
+                    status = 'Devolvida';
+                    break;
+                case '7':
+                    status = 'Cancelada';
+                    break;
             }
 
             return cb(false, {
