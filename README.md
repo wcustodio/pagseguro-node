@@ -100,6 +100,7 @@ payment.sendTransaction({
    method: String, //'boleto' ou 'creditCard'
    value: Number,
    installments: Number, //opcional, padrão 1
+   extra_amount: Number, //opcional, padrão 0
    hash: String //senderHash gerado pela biblioteca do PagSeguro
 }, function(err, data) {
 
