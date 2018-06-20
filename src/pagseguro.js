@@ -87,8 +87,8 @@ pagseguro.prototype.addItem = function(item) {
 pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.paymentMethod = transaction.method;
     this.checkoutData.installmentQuantity = transaction.installments || 1;
-    this.checkoutData.installmentValue = (transaction.value / transaction.installmentQuantity).toFixed(2);
-    this.checkoutData.extraAmount = transaction.extra_amount || 0
+    this.checkoutData.installmentValue = (transaction.value / this.checkoutData.installmentQuantity).toFixed(2);
+    this.checkoutData.extraAmount = (transaction.extra_amount || 0.00).toFixed(2)
     this.checkoutData.senderHash = transaction.hash;
 
     if (transaction.installments && transaction.installments > 1) {
