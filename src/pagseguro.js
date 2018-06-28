@@ -67,7 +67,7 @@ pagseguro.prototype.setBilling = function(billing) {
     this.billing = billing;
 }
 
-pagseguro.prototype.setCreditCardHolder = function(holder) {
+pagseguro.prototype.setCreditCardHolder = function(holder) {    
     this.holder = holder;
 }
 
@@ -79,7 +79,7 @@ pagseguro.prototype.addItem = function(item) {
     })
 
     this.checkoutData['itemQuantity' + (this.items.length)] = item.qtde;
-    this.checkoutData['itemAmount' + (this.items.length)] = parseFloat(item.value, 10).toPrecision(2)
+    this.checkoutData['itemAmount' + (this.items.length)] = item.value.toFixed(2);
     this.checkoutData['itemId' + (this.items.length)] = this.items.length;
     this.checkoutData['itemDescription' + (this.items.length)] = item.description;
 }
@@ -87,8 +87,8 @@ pagseguro.prototype.addItem = function(item) {
 pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.paymentMethod = transaction.method;
     this.checkoutData.installmentQuantity = transaction.installments || 1;
-    this.checkoutData.installmentValue = parseFloat(transaction.value / this.checkoutData.installmentQuantity, 10).toPrecision(2)
-    this.checkoutData.extraAmount = parseFloat(transaction.extra_amount || 0.00, 10).toPrecision(2)
+    this.checkoutData.installmentValue = (transaction.value / this.checkoutData.installmentQuantity).toFixed(2);
+    this.checkoutData.extraAmount = (transaction.extra_amount || 0.00).toFixed(2)
     this.checkoutData.senderHash = transaction.hash;
 
     if (transaction.installments && transaction.installments > 1) {
@@ -132,7 +132,7 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     })
 }
 
-pagseguro.prototype.sessionId = function(cb) {
+pagseguro.prototype.sessionId = function(cb) {    
     const url = this.url + '/sessions?token=' + this.token + '&email=' + this.email;
 
     request.post({ url: url }, function(err, response, body) {
