@@ -4,7 +4,7 @@ const xmlParser = require('xml2json');
 const pagseguro = function(params) {
     this.email = params.email;
     this.token = params.token;
-    this.mode = params.sandbox ? 'sandbox' : 'prod';
+    this.mode = params.sandbox === 1 ? 'sandbox' : 'prod';
     this.currency = params.currency || 'BRL';
     this.sandbox_email = params.sandbox_email;
 

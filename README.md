@@ -16,14 +16,25 @@ var payment = new PagSeguro({
    currency: '' //opcional - default BRL
 })
 ```
+ou
+```javascript
+var PagSeguro = require('node-pagseguro');
+
+var payment = new PagSeguro({
+   email: 'email@account.com',
+   token: 'ABCDEFGH12345678ABCDEFGH12345678',
+   sandbox: 0,
+   sandbox_email: '123123123123123@sandbox.pagseguro.com.br'
+})
+```
 
 ### Modo Sandbox
-Para utilizar o modo Sandbox é necessário configurar com o e-mail obtido nas configurações do [PagSeguro Sandbox](https://sandbox.pagseguro.uol.com.br).
+Para utilizar o modo Sandbox é necessário configurar com o e-mail obtido nas configurações do [PagSeguro Sandbox](https://sandbox.pagseguro.uol.com.br) e passar o valor 1 para o parâmetro 'sandbox'.
 ```javascript
 var payment = new PagSeguro({
    email: 'email@account.com',
    token: 'ABCDEFGH12345678ABCDEFGH12345678',
-   sandbox: true,
+   sandbox: 1,
    sandbox_email: '123123123123123@sandbox.pagseguro.com.br'
 })
 ```
@@ -97,11 +108,11 @@ payment.sessionId(function(err, session_id) {
 ### Enviar Transação
 ```javascript
 payment.sendTransaction({
-   method: String, //'boleto' ou 'creditCard'
+   method: String,       //'boleto' ou 'creditCard'
    value: Number,
    installments: Number, //opcional, padrão 1
    extra_amount: Number, //opcional, padrão 0
-   hash: String //senderHash gerado pela biblioteca do PagSeguro
+   hash: String          //senderHash gerado pela biblioteca do PagSeguro
 }, function(err, data) {
 
 });
