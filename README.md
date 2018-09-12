@@ -95,9 +95,11 @@ payment.sessionId(function(err, session_id) {
 ```
 
 ### Enviar Transação
+No pagamento com cartão de crédito é preciso gerar o token do cartão de crédito a partir da biblioteca do PagSeguro (https://devs.pagseguro.uol.com.br/docs/checkout-web-usando-a-sua-tela#obter-token-de-cartao)
 ```javascript
 payment.sendTransaction({
-   method: String, //'boleto', 'creditCard' ou 'eft'
+   method: String, //'boleto' ou 'creditCard'
+   credit_card_token: String, //token do cartão de crédito
    value: Number,
    installments: Number, //opcional, padrão 1
    hash: String //senderHash gerado pela biblioteca do PagSeguro
