@@ -168,10 +168,53 @@ pagseguro.prototype.transactionStatus = function(code, cb) {
                 case '5': status = 'Em Disputa'; break;
                 case '6': status = 'Devolvida'; break;
                 case '7': status = 'Cancelada'; break;
+                case '8': status = 'Debitado'; break;
+                case '9': status = 'Retenção temporária'; break;
             }
 
             return cb(false, {
                 code: json.transaction.status,
+                status: status,
+                date: json.transaction.date
+            });
+        } else {
+            const json = JSON.parse(xmlParser.toJson(body));
+            if (json.errors && json.errors.error) {
+                return cb(json.errors.error, false);
+            }
+
+            return cb(body, false);
+        }
+    })
+}
+
+/**
+ * Retorna o status do pedido notificado
+ */
+pagseguro.prototype.notificationStatus = function(notificationCode, cb) {
+    /**https://ws.pagseguro.uol.com.br/v3/transactions/notifications/ */
+    request.get({ url: this.url + '/transactions/notifications' + code + '?token=' + this.token + '&email=' + this.email }, function(err, response, body) {
+        if (err) {
+            return cb(err, false);
+        } else if (response.statusCode === 200) {
+            const json = JSON.parse(xmlParser.toJson(body));
+
+            let status = '';
+            switch (json.transaction.status) {
+                case '1': status = 'Aguardando Pagamento'; break;
+                case '2': status = 'Em Análise'; break;
+                case '3': status = 'Paga'; break;
+                case '4': status = 'Disponível'; break;
+                case '5': status = 'Em Disputa'; break;
+                case '6': status = 'Devolvida'; break;
+                case '7': status = 'Cancelada'; break;
+                case '8': status = 'Debitado'; break;
+                case '9': status = 'Retenção temporária'; break;
+            }
+
+            return cb(false, {
+                transaction: json.transaction.code,
+                statuscode: json.transaction.status,
                 status: status,
                 date: json.transaction.date
             });

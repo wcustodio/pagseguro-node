@@ -119,3 +119,16 @@ payment.sendTransaction({
 
 });
 ```
+### Consultar status da transação  
+```javascript
+payment.transactionStatus(code: String, function(err, data) {
+
+});
+```
+
+### Consultar status da notificação  
+```javascript
+payment.transactionStatus(notificationCode: String, function(err, data) {
+
+});
+```
