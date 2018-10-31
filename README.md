@@ -1,14 +1,14 @@
-# pagseguro-node
+# pagseguro-node2
 Biblioteca de integração PagSeguro UOL com checkout transparente para Node.js
 
 ## Instalação
-`npm install node-pagseguro`
+`npm install node-pagseguro2`
 
 ## Como Usar
 
 ### Modo Produção
 ```javascript
-var PagSeguro = require('node-pagseguro');
+var PagSeguro = require('node-pagseguro2');
 
 var payment = new PagSeguro({
    email: 'email@account.com',
@@ -18,7 +18,7 @@ var payment = new PagSeguro({
 ```
 ou
 ```javascript
-var PagSeguro = require('node-pagseguro');
+var PagSeguro = require('node-pagseguro2');
 
 var payment = new PagSeguro({
    email: 'email@account.com',
