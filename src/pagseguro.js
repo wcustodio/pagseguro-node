@@ -91,6 +91,10 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.extraAmount = (transaction.extra_amount || 0.00).toFixed(2)
     this.checkoutData.senderHash = transaction.hash;
 
+    if (transaction.reference && transaction.reference.length > 0) {
+        this.checkoutData.reference = transaction.reference;
+    }
+
     if (transaction.installments && transaction.installments > 1) {
         this.checkoutData.noInterestInstallmentQuantity = transaction.installments;
     }
@@ -174,6 +178,7 @@ pagseguro.prototype.transactionStatus = function(code, cb) {
 
             return cb(false, {
                 code: json.transaction.status,
+                reference: json.transaction.reference,
                 status: status,
                 date: json.transaction.date
             });
@@ -214,6 +219,7 @@ pagseguro.prototype.notificationStatus = function(notificationCode, cb) {
 
             return cb(false, {
                 transaction: json.transaction.code,
+                reference: json.transaction.reference,
                 statuscode: json.transaction.status,
                 status: status,
                 date: json.transaction.date

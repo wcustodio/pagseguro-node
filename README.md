@@ -114,6 +114,7 @@ payment.sendTransaction({
    value: Number,
    installments: Number, //opcional, padrão 1
    extra_amount: Number, //opcional, padrão 0
+   reference: String, //opcional, padrão vazio - string identificadora do pedido
    hash: String          //senderHash gerado pela biblioteca do PagSeguro
 }, function(err, data) {
 
@@ -122,13 +123,21 @@ payment.sendTransaction({
 ### Consultar status da transação  
 ```javascript
 payment.transactionStatus(code: String, function(err, data) {
-
+ 
 });
 ```
 
 ### Consultar status da notificação  
 ```javascript
-payment.transactionStatus(notificationCode: String, function(err, data) {
-
+payment.notificationStatus(notificationCode: String, function(err, data) {
+/**
+  * data = {  
+       transaction: String,
+       statuscode: Number,
+       reference: String,
+       status: String,
+       date: String
+    }
+  */
 });
 ```
