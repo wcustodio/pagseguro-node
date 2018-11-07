@@ -115,7 +115,8 @@ payment.sendTransaction({
    installments: Number, //opcional, padrão 1
    extra_amount: Number, //opcional, padrão 0
    reference: String, //opcional, padrão vazio - string identificadora do pedido
-   hash: String          //senderHash gerado pela biblioteca do PagSeguro
+   hash: String,          //senderHash gerado pela biblioteca do PagSeguro
+   noInterestInstallmentQuantity: Number //opcional, nº de parcelas s/ juros oferecido ao pagador (juros serão cobrados ao vendedor)
 }, function(err, data) {
 
 });

@@ -95,9 +95,10 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
         this.checkoutData.reference = transaction.reference;
     }
 
-    if (transaction.installments && transaction.installments > 1) {
-        this.checkoutData.noInterestInstallmentQuantity = transaction.installments;
+    if (transaction.noInterestInstallmentQuantity && transaction.noInterestInstallmentQuantity > 1) {
+        this.checkoutData.noInterestInstallmentQuantity = transation.noInterestInstallmentQuantity;
     }
+
 
     if (this.checkoutData.paymentMethod === 'creditCard') {
         this.checkoutData.creditCardToken = transaction.credit_card_token;
