@@ -79,7 +79,7 @@ pagseguro.prototype.addItem = function(item) {
     })
 
     this.checkoutData['itemQuantity' + (this.items.length)] = item.qtde;
-    this.checkoutData['itemAmount' + (this.items.length)] = item.value.toFixed(2);
+    this.checkoutData['itemAmount' + (this.items.length)] = item.value;
     this.checkoutData['itemId' + (this.items.length)] = this.items.length;
     this.checkoutData['itemDescription' + (this.items.length)] = item.description;
 }
