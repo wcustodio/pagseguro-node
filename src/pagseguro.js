@@ -1,5 +1,6 @@
 const request = require('request');
 const xmlParser = require('xml2json');
+const querystring = require('querystring');
 
 const pagseguro = function(params) {
     this.email = params.email;
@@ -111,7 +112,7 @@ pagseguro.prototype.sendTransaction = function(transaction, cb) {
 
     const params = {
         url: this.url + '/transactions?token=' + this.token + '&email=' + this.email,
-        form: this.checkoutData
+        form: querystring.stringify(this.checkoutData, null, null, { encodeURIComponent: escape })
     }
 
     request.post(params, function(err, response, body) {
