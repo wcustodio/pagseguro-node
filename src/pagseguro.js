@@ -18,7 +18,8 @@ const pagseguro = function(params) {
         token: this.token,
         mode: this.mode,
         currency: this.currency,
-        url: this.url
+        url: this.url,
+        shippingAddressRequired: false
     }
 
     this.items = [];
@@ -47,6 +48,7 @@ pagseguro.prototype.setShipping = function(shipping) {
     this.checkoutData.shippingAddressState = shipping.state;
     this.checkoutData.shippingAddressPostalCode = shipping.postal_code;
     this.checkoutData.shippingAddressCountry = shipping.country || 'BRA';
+    this.checkoutData.shippingAddressRequired = shipping.required;
 
     if (shipping.same_for_billing) {
         this.setBilling(shipping);
