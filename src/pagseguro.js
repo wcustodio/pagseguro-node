@@ -87,11 +87,11 @@ pagseguro.prototype.addItem = function(item) {
 pagseguro.prototype.sendTransaction = function(transaction, cb) {
     this.checkoutData.paymentMethod = transaction.method;
     this.checkoutData.installmentQuantity = transaction.installments || 1;
-    this.checkoutData.installmentValue = (transaction.value / transaction.installments).toFixed(2);
+    this.checkoutData.installmentValue = transaction.installmentValue;
     this.checkoutData.senderHash = transaction.hash;
 
-    if (transaction.installments && transaction.installments > 1) {
-        this.checkoutData.noInterestInstallmentQuantity = transaction.installments;
+    if (transaction.noInterestInstallmentQuantity) {
+        this.checkoutData.noInterestInstallmentQuantity = transaction.noInterestInstallmentQuantity;
     }
 
     if (this.checkoutData.paymentMethod == 'creditCard') {
