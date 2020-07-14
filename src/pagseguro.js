@@ -7,7 +7,9 @@ const pagseguro = function (params) {
     this.mode = params.sandbox == true ? 'sandbox' : 'prod';
     this.currency = params.currency || 'BRL';
     this.sandbox_email = params.sandbox_email;
-
+    request.defaults({headers: {
+        charset:'UTF-8'
+    }});
     switch (this.mode) {
         case 'prod':
             this.url = 'https://ws.pagseguro.uol.com.br/v2';
@@ -159,6 +161,26 @@ pagseguro.prototype.sessionId = function (cb) {
             return cb(body, false);
         }
     })
+}
+
+pagseguro.prototype.notification = function (notificationCode, cb) {
+    request.get(
+        {url: this.url + '/transactions/notifications/' + notificationCode + '?token=' + this.token + '&email=' + this.email},
+        function(err, response, body){
+            if(err){
+                return cb(err, false);
+            } else if (response.statusCode == 200) {
+                const json = JSON.parse(xmlParser.toJson(body));
+                return cb(false, json);
+            } else {
+                const json = JSON.parse(xmlParser.toJson(body));
+                if (json.errors && json.errors.error) {
+                    return cb(json.errors.error, false);
+                }
+    
+                return cb(body, false);
+            }
+        });
 }
 
 pagseguro.prototype.transactionStatus = function (code, cb) {
