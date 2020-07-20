@@ -103,6 +103,8 @@ payment.sendTransaction({
    value: Number,
    installments: Number, //opcional, padrão 1
    hash: String //senderHash gerado pela biblioteca do PagSeguro
+   shippingAddressRequired:Boolean, // Para checkout de serviços utilizar false
+   bankName:String, //Obrigatório para o método eft
 }, function(err, data) {
 
 });
